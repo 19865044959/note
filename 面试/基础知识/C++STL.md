@@ -16,8 +16,6 @@
 
 -   原理：vector的底层实际上就是一块连续的地址空间，该地址空间有3个指针（迭代器），分别指向vector的首地址、尾地址、最后一个元素的地址
 
-    
-
     -   _Myfirst 和 _Mylast 可以用来表示 vector 容器中目前已被使用的内存空间，即vec.size()
 
     -   _Mylast 和 _Myend 可以用来表示 vector 容器目前空闲的内存空间，即vec.capacity() - vec.size()
@@ -26,23 +24,22 @@
 
 -   运用好这3个迭代器，就能够实现vector几乎所有功能：![img](C:\Users\huany\Documents\note\pictures\7ac5b521-116e-485e-8aee-bc93b17112f8-4786849.jpg)
 
--   [vector扩容](https://blog.csdn.net/gettogetto/article/details/77804094?utm_medium=distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromMachineLearnPai2~default-1.vipsorttest&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromMachineLearnPai2~default-1.vipsorttest)有了解过吗？
-
+-   [vector扩容](https://blog.csdn.net/gettogetto/article/details/77804094?utm_medium=distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromMachineLearnPai2~default-1.vipsorttest&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromMachineLearnPai2~default-1.vipsorttest)/string扩容有了解过吗？
     -   发生场合：当使用push_back向vector尾部加入一个新元素时，当超过了vector目前的最大容量时，就会发生扩容。
-
+    
     -   扩容大小：一般有2倍扩容与1.5倍扩容，扩容因子越大，那么意味着预留空间越大，浪费空间越多，但是如果扩容因子过小，就会时常产生预留空间不足，那么就需要重新开辟一段空间，把原有数据复制到新空间上，这时候时间浪费越大。因此，扩容因子的取值权衡了空间与时间的优化。
-
+    
 -   map/set
 
     -   底层实现：红黑树，查找/删除节点的时间复杂度：O(logn)
-
     -   为什么要用红黑树？红黑树是一种平衡二叉树。
-
     -   那平衡二叉树有什么优点？平衡二叉树查找元素的最坏时间复杂度也是O(logn)，克服了二叉搜索树因退化成链表而致使的搜索时间复杂度变成O(n)这一情况
-
     -   为什么有了平衡二叉树还需要红黑树？因为平衡二叉树的条件过于严苛：左右子树的高度差不超过1，这使得在插入/删除节点后几乎都会破坏该规则，进而需要我们左旋、右旋来调整，对于频繁插入、删除的场景来讲，平衡二叉树的性能大大降低，为了解决这个问题，于是出现了红黑树。
-
     -   红黑树引入了颜色概念，使得平衡条件得以简化，降低了对旋转的要求，从而提高了性能
+
+## string
+
+-   改进：C中的char* a[] = "abcde"不允许扩容，否则会出现数组越界的情况。C++中，包括vector与string，都可以动态申请内存。即：当长度超过了它的容量capacity时，它就会在内存中重新寻找一段连续内存，经过实验，得出扩容大小与vector相同，都是之前的1.5倍
 
 ## unordered_map
 
@@ -114,7 +111,6 @@
 ## priority_queue
 
 -   实现：利用堆结构进行实现
-
 -   [堆的具体实现](https://guguoyu.blog.csdn.net/article/details/81283998?utm_medium=distribute.pc_relevant_t0.none-task-blog-2~default~BlogCommendFromMachineLearnPai2~default-1.vipsorttest&depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2~default~BlogCommendFromMachineLearnPai2~default-1.vipsorttest)：
 
     -   具体来说分为两个部分：堆的初始构建、堆的插入、堆的删除
@@ -124,5 +120,5 @@
     -   插入元素：首先将新元素作为堆的最后一个节点（即二叉树最底层最右侧节点），然后一层一层的寻找父亲，并交换节点使得父节点值最大，直到达到根节点，复杂度：O(logk)其中k是插入元素后堆大小
 
     -   删除元素：首先将根节点弹出，然后将堆的最后一个节点放到根节点上，一层一层的遍历，让父亲节点最大，最终到达叶子节点为止，复杂度：O(logk)其中k是删除元素后堆的大小
-
 -   [建立、插入、删除堆元素](https://blog.csdn.net/SZU_Crayon/article/details/81812946?utm_medium=distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~default-18.vipsorttest&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~default-18.vipsorttest)
+
