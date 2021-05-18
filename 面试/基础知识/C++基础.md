@@ -1,3 +1,5 @@
+
+
 ## 简述一下面向对象与面向过程之间的区别
 
 -   面向过程编程：分析出解决问题的步骤，然后一步一步实现
@@ -466,4 +468,35 @@ union Transfer{
     saddr.sin_port = htons(6000); //将端口号6000的主机字节序转换成网络字节序
     ```
 
-    
+
+## 什么是explicit关键字？
+
+-   该关键字只能作用于类内构造函数，说明构造函数不能进行隐式转换。
+-   隐式转换：若C++类构造函数只有一个参数时，那么在编译时就可以将该参数对应的数据类型隐式转换为该类对象，比如：
+
+```c++
+ class MyClass
+{
+public:
+  MyClass( int num );
+}
+//.
+MyClass obj = 10; //ok,convert int to MyClass
+//等同于以下操作：
+MyClass tmp(10);
+MyClass obj = tmp;
+
+```
+
+-   当加入该关键字，就不允许这样转换
+
+```c++
+class MyClass
+{
+public:
+  explicit MyClass( int num );
+}
+//.
+MyClass obj = 10; //err,can't non-explict convert
+```
+
