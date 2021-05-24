@@ -38,45 +38,107 @@
 
 ## linux常用命令
 
+-   系统信息
+    -   arch 显示处理器架构（x86 还是x86_64）
+    
+    -   uname -r 显示内核版本
+    
+    -   cat /proc/interrupts 显示中断
+    
+-   关机
+
+    -   init 0
+
+    -   shutdown -h now
+
+    -   telinit 0
+
 -   文件和磁盘空间：
+
     -   fdisk - l列出所有分区表
+
 -   文件目录与管理：
 
     -   cd 切换目录
+
+        -   cd /切换到根目录
+
+        -   cd  切换到个人主目录
 
     -   pwd 查看当前绝对路径
 
     -   mkdir 创建目录
 
+        -   mkdir test //在当前目录创建一个test文件夹
+
+        -   mkdir -p test2/test3 //在当前目录下的test2目录中，创建test3目录，如果没有-p，那么会报错
+
     -   rmdir 删除目录
+
+        -   rmdir  test2/test3 //在当前目录下的test2目录中，删除test3目录，注意test3目录一定是空才能删除
+
+        -   rm -rf test2 //强行递归删除目录test2以及其下的所有内容，不可恢复
 
     -   ls 查看当前目录下的文件
 
     -   cp 拷贝文件
+        -   cp source  dest //比如，cp ./main.cpp test2 -----将本目录下的main.cpp文件复制到当前目录下test2目录中
 
-    -   mv 移动文件
+    -   mv 移动文件(与cp相同)
+
+-   创建与删除文件
+
+    -   touch xxx.md/xxx.cpp/xxx.c
+
+    -   rm xxx.md/xxx.cpp/xxx.c
+
 -   查看文件内容：
 
-    -   cat -n 打开文件，并对行进行编号
+    -   cat（用于连接文件并打印到标准输出设备上，即终端上）
+
+        -   cat -n main.cpp //将main.cpp文件编号打印
+
+        -   cat -n main.cpp > main2.cpp //将main.cpp文件的内容加上行号后输入到main2.cpp文件中
+
+        -   cat -n main.cpp main2.cpp > main3.cpp //将main.cpp与main2.cpp文件加上行号，一起输入到main3.cpp文件中
+
+        -   cat /dev/null > main3.cpp //清空main3.cpp文件
 
     -   tac
+        -   tac main.cpp 将main.cpp文件反向输出
 
-    -   more
+    -   more 与cat相似，但是更方便逐页阅读
 
-    -   less
+    -   less 与more相似，但是需要按q来退出
 
     -   head
 
-    -   tail
+        -   head -n a main.cpp 显示main.cpp的前a行
+
+        -   head -c 20 main.cpp 显示main.cpp的前20个字节
+
+    -   tail（与head用法相似）
+
 -   文件目录与权限：
 
     -   chmod
+
+        -   chmod 谁 +- rwx 文件名，其中，谁包括：
+
+            -   u:user 文件所有者
+
+            -   g:group 文件所有者所在组
+
+            -   o: other 所有其他用户
+
+        -   chmod ugo +rwx main.cpp 所有人都可以对main.cpp rwx
 
     -   chown
 
     -   chgrp
 
     -   umask
+
 -   文件查找：
 
     -   which
@@ -86,17 +148,26 @@
     -   locate
 
     -   find
--   进程管理：(process status)
+        -   find . -name "*.cpp" //查找当前目录及其子目录下所有后缀名为.cpp的文件
+
+-   进程管理：
 
     -   ps -u 显示所有用户进程
+
     -   ps -af 显示所有跟终端相关的进程详细信息
+
     -   ps -ax 列出所有进程的信息
+
     -   top 实时显示进程状况、CPU占用率、内存占用率
+
 -   前台运行程序：
 
     -   ctrl + c 结束一个前台正在运行的程序
--   ctrl + z 停止一个前台正在运行的程序
+
+    -   ctrl + z 停止一个前台正在运行的程序
+
 -   删除：
+
     -   rm -rf 无提示递归删除本目录下的所有文件及其子文件
 
 ## linux编辑、编译与链接
