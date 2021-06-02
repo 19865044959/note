@@ -1,13 +1,17 @@
 ## STL六大组件
 
 -   容器（Container）
+    -   vector、list、deque、set、map等
 -   算法（Algorithm）
+    -   sort、find、copy等
 -   迭代器（Iterator）
+    -   类似指针
 -   仿函数（Function object）
+    -   扮演函数行为的类叫做仿函数
 -   适配器（Adaptor）
     -   stack与queue就是适配器，而不是容器，因为它们是对容器的再封装
 -   空间配置器（allocator）
-    -   alloc
+    -   alloc，负责配置空间与管理
 
 ## 快速浏览
 
@@ -15,7 +19,7 @@
 
 ​	2.list  底层数据结构为**环状双向链表**，支持快速增删，对于任意一个位置元素的删除、插入时间复杂度都是O(1)
 
-​	3.deque  底层数据结构为一个**中央控制器和多个缓冲区**，详细见STL源码剖析P146，支持首尾（中间不能）快速增删，也支持随机访问
+​	3.deque  底层数据结构为一个**中央控制器和多个缓冲区**，其空间是**分段连续**的，其中缓冲区是真正储存数据的地方，中央控制区储存指向缓冲区的各个指针，支持首尾（中间不能）快速增删，也支持随机访问
 
 ​	4.stack  底层一般用2，3实现，封闭头部即可，不用vector的原因应该是容量大小有限制，扩容耗时
 
@@ -23,7 +27,7 @@
 
 ​	6.4，5是适配器（adaptor）,而不叫容器（container），因为是对容器的再封装
 
-​	7.priority_queue 的底层数据结构一般为vector为底层容器，堆heap为处理规则来管理底层容器实现
+​	7.priority_queue 的底层数据结构一般为vector为底层容器，**堆heap为处理规则**来管理底层容器实现
 
 ​	8.set底层数据结构为红黑树，有序，不重复
 
@@ -33,11 +37,11 @@
 
 ​	11.multimap 底层数据结构为红黑树，有序，可重复
 
-​	12.hash_set ﻿﻿﻿﻿底层数据结构为hash表，无序，不重复
+​	12.unordered_set ﻿﻿﻿﻿底层数据结构为hash表，无序，不重复
 
 ​	13.hash_multiset 底层数据结构为hash表，无序，可重复
 
-​	14.hash_map   ﻿﻿﻿﻿底层数据结构为hash表，无序，不重复
+​	14.unordered_map   ﻿﻿﻿﻿底层数据结构为hash表，无序，不重复
 
 ​	15.hash_multimap 底层数据结构为hash表，无序，可重复
 
@@ -69,7 +73,7 @@ public:
 
 -   [vector扩容](https://blog.csdn.net/gettogetto/article/details/77804094?utm_medium=distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromMachineLearnPai2~default-1.vipsorttest&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromMachineLearnPai2~default-1.vipsorttest)/string扩容有了解过吗？
     -   发生场合：当使用push_back向vector尾部加入一个新元素时，当超过了vector目前的最大容量时，就会发生扩容。
-    -   扩容大小：一般有2倍扩容与1.5倍扩容，扩容因子越大，那么意味着预留空间越大，浪费空间越多，但是如果扩容因子过小，就会时常产生预留空间不足，那么就需要重新开辟一段空间，把原有数据复制到新空间上，并释放原空间。这个时间成本极大。因此，扩容因子的取值权衡了空间与时间的优化。
+    -   扩容大小：一般有2倍扩容与1.5倍扩容，扩容因子越大，那么意味着预留空间越大，浪费空间越多，但是如果扩容因子过小，就会时常产生预留空间不足，那么就会频繁的重新开辟一段空间，把原有数据复制到新空间上，并释放原空间。这个时间成本极大。因此，扩容因子的取值权衡了空间与时间的优化。
 -   **序列式容器**（数组式容器，包括vector、deque）迭代器失效
     -   insert插入操作，若引起空间的重新分配即插入的元素无法被已有的容器容纳而造成的空间重分配时，原来的迭代器会指向无效的地址空间从而造成迭代器的失效。
     -   erase删除操作，由于删除元素而带来的元素向前迁移，会导致当前迭代器及以后所有的迭代器失效。
@@ -127,7 +131,7 @@ void pop_back(){
 
 ### 数据结构
 
--   deque  底层数据结构为一个**中央控制器和多个缓冲区**，详细见STL源码剖析P146，支持首尾（中间不能）快速增删，也支持随机访问
+-   deque  底层数据结构为一个**中央控制器和多个缓冲区**，其中缓冲区是真正储存数据的地方，中央控制区储存指向缓冲区的各个指针，支持首尾（中间不能）快速增删，也支持随机访问
 
 ### 特点
 
@@ -178,7 +182,7 @@ void pop_back(){
 
 -   pop_back()
     -   当最后一个缓冲区只有一个元素时，调用pop_back()，会释放该缓冲区，pop_front()同理
--   引起map重新选取地址、复制原map值、释放原空间的2种情况：
+-   引起map重新开辟空间、复制原map值、释放原空间的2种情况：
     -   当map的尾端的节点备用空间不足时，即调用push_back(val)，增加缓冲区，但是发现map尾节点已经有其他数据了
     -   当map的头部的节点备用空间不足时，即调用push_front(val)，增加缓冲区，但是发现map头节点已经有其他数据了
 -   利用erase()与insert()函数删除deque中间元素时，都会使短的一端所有元素向前/向后移动一格，因此复杂度是O(n)
@@ -258,17 +262,20 @@ void pop_back(){
 ## priority_queue
 
 -   实现：利用堆结构进行实现
+
 -   [堆的具体实现](https://guguoyu.blog.csdn.net/article/details/81283998?utm_medium=distribute.pc_relevant_t0.none-task-blog-2~default~BlogCommendFromMachineLearnPai2~default-1.vipsorttest&depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2~default~BlogCommendFromMachineLearnPai2~default-1.vipsorttest)：
 
     -   具体来说分为两个部分：堆的初始构建、堆的插入、堆的删除
 
-    -   堆的初始构建：假设给的数组是完全二叉树的层序遍历，那么它最右下角拥有孩子节点的节点的idx是n / 2 - 1，从该节点开始一直到根节点，如果父节点 < 两个孩子节点中的最大值，那么就与孩子节点交换，直到叶子节点为止。这样从右下节点一直到根节点遍历一遍，那么会使得每个父节点都是>=它所有的孩子节点。复杂度是O(nlogn)
+    -   堆的初始构建：假设给的数组是完全二叉树的层序遍历，那么它最右下角拥有孩子节点的节点的idx是(n - 1) / 2，从该节点开始一直到根节点，如果父节点 < 两个孩子节点中的最大值，那么就与孩子节点交换，直到叶子节点为止。这样从右下节点一直到根节点遍历一遍，那么会使得每个父节点都是>=它所有的孩子节点。复杂度是O(nlogn)
 
     -   插入元素：首先将新元素作为堆的最后一个节点（即二叉树最底层最右侧节点），然后一层一层的寻找父亲，并交换节点使得父节点值最大，直到达到根节点，复杂度：O(logk)其中k是插入元素后堆大小
 
     -   删除元素：首先将根节点弹出，然后将堆的最后一个节点放到根节点上，一层一层的遍历，让父亲节点最大，最终到达叶子节点为止，复杂度：O(logk)其中k是删除元素后堆的大小
+    
 -   [建立、插入、删除堆元素](https://blog.csdn.net/SZU_Crayon/article/details/81812946?utm_medium=distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~default-18.vipsorttest&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~default-18.vipsorttest)
--   
+
+    
 
 ## map/set
 

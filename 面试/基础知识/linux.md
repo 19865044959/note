@@ -25,16 +25,17 @@
 ## linux包括几个部分？
 
 -   内核
-
 -   shell：是系统的用户界面，提供了用户与内核进行交互操作的一种接口，它接收用户命令并把它送去内核执行
-
 -   文件系统
-
 -   应用程序
-
 -   网络接口
-
 -   设备驱动
+
+## linux文件系统层次结构
+
+![在这里插入图片描述](../../pictures/20200226223714630.png)
+
+![在这里插入图片描述](../../pictures/20200226223917317.png)
 
 ## linux常用命令
 
@@ -84,7 +85,7 @@
     -   cp 拷贝文件
         -   cp source  dest //比如，cp ./main.cpp test2 -----将本目录下的main.cpp文件复制到当前目录下test2目录中
 
-    -   mv 移动文件(与cp相同)
+    -   mv 移动文件(与cp相同)， 可以利用它来重命名文件，mv a.txt b.txt //将a.txt文件重命名为b.txt文件
 
 -   创建与删除文件
 
@@ -158,7 +159,7 @@
 
     -   ps -ax 列出所有进程的信息
 
-    -   top 实时显示进程状况、CPU占用率、内存占用率
+    -   top 实时显示进程状况、CPU占用率、内存占用率、PID
 
 -   前台运行程序：
 
@@ -174,7 +175,7 @@
 
 -   首先创建一个.c文件，touch hello.c
 
--   编辑器：利用gedit编辑器打开 hello.c文件：gedit hello.c
+-   编辑器：利用gedit编辑器打开 hello.c文件：gedit hello.c /  vim hello.c
 
 -   编写完程序后，保存，利用gcc编译器来编译与链接.c文件，生成可执行文件gcc hello.c -o hello
 
@@ -229,7 +230,7 @@ int main(int argc, char *args[])
 		write(STDOUT_FILENO, output_message, sizeof(output_message));
 		// 将信息显示在屏幕上
 		write(STDOUT_FILENO, buf_write, strlen(buf_write));
-	}	
+	}
 	
 	return 0;
 }

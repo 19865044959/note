@@ -1,0 +1,269 @@
+# 模板
+
+-   模板的定义：函数模板是一个通用模具，为了是大大提高复用性
+
+## 函数模板基本语法
+
+-   函数模板是一个通用函数，其函数类型和形参不具体定制，用一个**虚拟类型**代替。
+-   语法：
+
+```c++
+template<typename T> //class也可，作用域从第一个遇到的函数结尾处
+void fcn(){}
+//作用域结尾处
+
+template<typename T>
+void fcn(){}
+//作用域结尾处
+```
+
+-   注意事项
+    -   函数模板可以进行自动类型推导，但是需要推导出一致的T，才可以使用
+    -   模板必须确定T的数据类型（即使不使用T），才能使用
+
+```c++
+// 1、自动类型推导，必须推导出一致的数据类型T,才可以使用
+void test01()
+{
+	int a = 10;
+	int b = 20;
+	char c = 'c';
+
+	mySwap(a, b); // 正确，可以推导出一致的T
+	//mySwap(a, c); // 错误，推导不出一致的T类型
+}
+
+
+// 2、模板必须要确定出T的数据类型，才可以使用
+template<class T>
+void func()
+{
+	cout << "func 调用" << endl;
+}
+
+void test02()
+{
+	//func(); //错误，模板不能独立使用，必须确定出T的类型
+	func<int>(); //利用显示指定类型的方式，给T一个类型，才可以使用该模板
+}
+
+int main() {
+
+	test01();
+	test02();
+
+	system("pause");
+
+	return 0;
+}
+```
+
+
+
+## 函数模板与普通函数
+
+**普通函数与函数模板的区别**
+
+1.  函数模板可以像普通函数那样被重载
+2.  c++编译器优先考虑普通函数
+3.  如果函数模板可以产生更好的匹配，选择函数模板
+4.  可以通过空模板实参语法限制编译器只能通过模板匹配
+5.  普通函数可以发生自动类型转换（隐式类型转换）
+6.  函数模板调用时，如果利用自动类型推导，则不允许自动类型转换；但是利用显示指定类型的方式，可以发生隐式类型转换；
+
+```c++
+//1. 模板重载
+template<class T>
+int compare(T& a, T& b){
+    if(a > b) return -1;
+    else return 1;
+}
+template<class T>
+int compare(T& a, T& b, T& c){
+    
+}
+
+//2. 与第一个同时出现，优先考虑普通函数
+int compare(int& a, int& b){
+    
+}
+
+//3. 若传入的是int与int，则优先考虑函数模板而不是下面这个函数
+//5. 若掺入的是int与char，只能考虑下面函数而不能考虑模板
+int compare(int& a, char& b){
+    
+}
+
+//使用函数模板时，如果用自动类型推导，不会发生自动类型转换,即隐式类型转换
+void test01()
+{
+	int a = 10;
+	int b = 20;
+	char c = 'c';
+	
+	cout << myAdd01(a, c) << endl; //正确，将char类型的'c'隐式转换为int类型  'c' 对应 ASCII码 99
+
+	//myAdd02(a, c); // 报错，使用自动类型推导时，不会发生隐式类型转换
+
+	myAdd02<int>(a, c); //正确，如果用显示指定类型，可以发生隐式类型转换
+}
+
+int main(){
+    int a = 10, b = 10;
+    compare<>(a, b) //4
+}
+```
+
+-   为什么要用模板？/模板有什么优势？
+
+```c++
+//例子1：vector通过模板，使得可以传入任意的参数，包括int、double、甚至是自定义类型
+//若没有模板支撑，那么就需要进行强制类型转换，比如：vector<*void>，将void*指针最后强制转换为其他类型指针，比如int*，double*
+template <class _Ty, class _Alloc = allocator<_Ty>>
+class vector { // varying size array of values
+private:
+    template <class>
+    friend class _Vb_val;
+    friend _Tidy_guard<vector>;
+    
+};
+
+//例子2：sort通过模板，传入的是各式各类的iterator，比如你可以传递vector的iterator，也可以传递map的iterator等等
+template <class _RanIt>
+void sort(const _RanIt _First, const _RanIt _Last) { // order [_First, _Last), using operator<
+    _STD sort(_First, _Last, less<>());
+}
+
+```
+
+## 模板函数实现原理
+
+-   结论：编译器并不是把函数模板处理成能够处理任何类型的函数，而是通过函数模板通过具体的类型生成不同的函数，编译器会对函数模板进行**两次编译**， 第一次是在声明的地方对模板自身的编译（检查是否有错等等），第二次是在调用地方对参数替换后的代码进行编译
+
+```c++
+template<class T>
+int compare(T& a, T& b){
+    if(a > b) return -1;
+    else return 1;
+}
+
+int main(){
+	auto res1 = compare(1, 3); //生成int类型的模板函数
+	auto res2 = compare(1.0, 3.0) //生成float类型的模板函数
+	return 0;
+}
+```
+
+## 类模板基本语法
+
+```c++
+#include<iostream>
+using namespace std;
+
+template<typename T>
+class animals {
+public:
+	animals(T age, T num) : age(age), num(num){}
+	void show() {
+		cout << "age : " << age << endl;
+		cout << "num : " << num << endl;
+	}
+	T age;
+	T num;
+};
+
+int main() {
+	//与函数模板不同的地方：类模板在调用时不可以自动类型转换，必须显示指定类型
+	//但是函数模板可以在调用时完成自动类型推导
+	animals<int> tmp(13, 10); 
+	tmp.show();
+	return 0;
+}
+```
+
+## 类模板的派生
+
+### 类模板派生普通类
+
+### 类模板派生模板类
+
+```c++
+#include<iostream>
+using namespace std;
+
+template<typename T>
+class animals {
+public:
+	animals(T age, T num) : age(age), num(num) {}
+	void show() {
+		cout << "age : " << age << endl;
+		cout << "num : " << num << endl;
+	}
+	T age;
+	T num;
+};
+
+//类模板派生普通类
+class cat : public animals<int> { //模板类被调用时一定要显式指定类型
+public:
+	cat(int age, int num) : animals<int>(age, num){}
+};
+
+//类模板派生模板类
+template<typename T>
+class aAnimal : public animals<T> {
+public:
+	aAnimal(T age, T num) : animals<T>(age, num){}
+};
+
+int main() {
+	//与函数模板不同的地方：类模板在调用时不可以自动类型转换，必须显示指定类型
+	//但是函数模板可以在调用时完成自动类型推导
+	cat tmp(13, 10);
+	tmp.show();
+
+	aAnimal<int> ani(130, 100);
+	ani.show();
+
+	return 0;
+}
+```
+
+## C++模板不能分开把源文件与头文件
+
+-   说明：也就是说，写类模板时一定要把声明与定义（实现）放到一个文件之中，由于该文件即含有声明，又含有定义，因此会把类模板的实现文件定义成.hpp文件
+-   原因：这主要与模板的实现机制与c++的编译机制有关
+    -   类模板需要经过**两次编译**，一次是类模板声明处进行编译；另一次是在调用类模板生成相应的模板类时（也就是类的实例化时）会再次出现一次编译
+    -   而c++的编译机制是每个文件**独立编译**的，即在编译一个cpp文件时，另外的cpp文件的内容对编译器来说是不可见的。
+    -   当在cpp编译时，发现一个函数调用，但是找不到，由于包含了一个.h文件，因此编译器以为这个函数在其他地方实现，暂时通过编译，让链接器去检查是否真正能在其他cpp文件中找到该函数实现；而在真正拥有类模板实现的cpp文件，由于它这个cpp文件是独立编译的，在这个文件中又没有出现类模板的调用，因此仅仅编译了类模板，而相应的具体的模板类没有被编译。这样在链接时，由于无法找到具体的模板类，因此会报错。
+
+## 类模板遇到static关键字
+
+-   结论：当类模板遇到static关键字，这个static关键字在类模板实例化时，不同的模板类的static不共享，但是一个模板类下面的所有对象共享一个static关键字。
+
+![image-20210529230854704](../pictures/image-20210529230854704.png)
+
+```c++
+#include<iostream>
+using namespace std;
+
+template<typename T>
+class A {
+public:
+	static int a;
+};
+template<typename T>
+int A<T>::a = 0; //static对象需要类外定义
+
+int main() {
+	A<int> a1, a2, a3;
+	A<float> b1, b2, b3;
+	a1.a = 10;
+	b1.a = 100.0;
+	cout << a1.a << " "<< a2.a << " " << a3.a << endl; // 10 10 10
+	cout << b1.a << " " << b2.a << " " << b3.a << endl;// 100 100 100
+
+	return 0;
+}
+```
+
