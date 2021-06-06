@@ -69,9 +69,9 @@
 
 ## C++程序内存分为哪几个部分？
 
-![img](C:\Users\huany\Documents\note\pictures\c911caf5-68a2-4081-b216-0dbdeee9a078-4786849-1620632020354.jpg)
+![img](..\..\pictures\c911caf5-68a2-4081-b216-0dbdeee9a078-4786849-1620632020354.jpg)
 
-![img](C:\Users\huany\Documents\note\pictures\7c0ced0e-07c2-458a-8c1a-8691bbe43429-4786849-1620632019050.jpg)
+![img](..\..\pictures\7c0ced0e-07c2-458a-8c1a-8691bbe43429-4786849-1620632019050.jpg)
 
 ## const关键字
 
@@ -112,7 +112,7 @@
 
     -   基本类型转换
 
-    -   void指针转换为目标类型指针![img](C:\Users\huany\Documents\note\pictures\c64e79aa-dad0-454c-b6d6-e949f7d24c99-4786849.jpg)
+    -   void指针转换为目标类型指针![img](..\..\pictures\c64e79aa-dad0-454c-b6d6-e949f7d24c99-4786849.jpg)
 
     -   void指针：由于void指针没有特定类型，因此它可以指向任何数据类型
 
@@ -120,7 +120,7 @@
 
     -   可以通过const_cast修改const类型变量
 
-    -   ![img](C:\Users\huany\Documents\note\pictures\062a1f45-c771-47e5-8760-da61f165824b-4786849.jpg)
+    -   ![img](..\..\pictures\062a1f45-c771-47e5-8760-da61f165824b-4786849.jpg)
 
 -   dynamic_cast
 
@@ -154,17 +154,17 @@
     
     -   shared_ptr引用计数失效的情况：相互引用
     
-        -   定义两个类，每个类中又包含指向另一个类的shared_ptr，那么让它们相互引用，就会造成引用计数失效![img](C:\Users\huany\Documents\note\pictures\025f443e-69f3-410d-80bd-aff3edb2a008-4786849.jpg)
+        -   定义两个类，每个类中又包含指向另一个类的shared_ptr，那么让它们相互引用，就会造成引用计数失效![img](..\..\pictures\025f443e-69f3-410d-80bd-aff3edb2a008-4786849.jpg)
     
         -   引用链如下：当出了test_refer_to_each_other时，ptr_a与ptr_b销毁，CA与CB的引用数--，即①与③断开，但是仍然有相互引用链②与④，因此引用计数仍不为零，无法析构
-        -   ![img](C:\Users\huany\Documents\note\pictures\a25662e8-4cb4-4014-8600-489a0c2faedb-4786849.jpg)
+        -   ![img](..\..\pictures\a25662e8-4cb4-4014-8600-489a0c2faedb-4786849.jpg)
     
     -   解决相互引用问题：利用weak_ptr指针
     
         -   将其中两个类中其中一个成员变量设为weak_ptr
     
         -   原因：weak_ptr不增加引用计数值，即CA的use_count() == 1，那么析构ptr_a与ptr_b后，CA的引用计数器变成了0，delete CA对象，那么m_ptr_b也会调用析构函数，使得CB引用计数器也变为了0，最后不会形成循环引用环
-        -   ![img](C:\Users\huany\Documents\note\pictures\50f14bfd-151e-4c4b-a652-bf07a0db3615-4786849.jpg)
+        -   ![img](..\..\pictures\50f14bfd-151e-4c4b-a652-bf07a0db3615-4786849.jpg)
     
     -   与unique_ptr有什么不同的地方？
         -   unique_ptr只允许一个指针指向一个对象，而shared_ptr实现多个智能指针指向一个相同的对象，详见：[3种智能指针解析](https://blog.csdn.net/king_way/article/details/95536938)
@@ -200,7 +200,7 @@
         -   静态多态：静态多态就是**重载**，最熟悉的就是函数重载，函数名可以相同，但是变量类型、变量个数、甚至是位置不同都代表不同的函数。由于在编译时就可以确定函数入口地址，因此是静态多态。
 
         -   动态多态：在基类的函数前面加上virtual关键字，变成**虚函数**，那么在派生类中可以**重写**该函数，运行时会根据对象的实际类型来调用相应的函数，即基类指针如果指向的是基类调用的就是基类的函数，指向派生类调用的就是派生类中被重写的函数。运行时在虚函数表中寻找调用函数的地址。因此是动态多态。
-        -   ![img](C:\Users\huany\Documents\note\pictures\11451b12-3466-4750-92ea-3fec17c354bd-4786849.jpg)
+        -   ![img](..\..\pictures\11451b12-3466-4750-92ea-3fec17c354bd-4786849.jpg)
 
 2.  多态的底层原理是什么？
 
@@ -402,7 +402,7 @@ private:
 -   格式： 数据类型 (*指针名) (形参表)  比如： int (*ptr) (int a, int b);一个返回值为int，接收两个形参的函数指针ptr，使用：int a = (*ptr)(3, 4);
 
 -   作用：一些函数指针可以提高代码的重用性：
--   ![img](C:\Users\huany\Documents\note\pictures\086bae69-e070-4da1-85f0-dfc13c4ae10a-4786849.jpg)
+-   ![img](..\..\pictures\086bae69-e070-4da1-85f0-dfc13c4ae10a-4786849.jpg)
 
 ## 将一个程序编译成可执行文件的步骤：
 
@@ -459,7 +459,7 @@ g++ index.o -o index.exe //链接，生成exe可执行文件
 -   底层原理：**编译器**在它的**符号表**symbol table里放入**函数类型和参数**（包括函数名字和参数类型及返回值类型），另外，编译器看到内联函数和内联函数的分析没有错时，函数的代码也被放入符号表中，代码是以源程序的形式存放还是以编译过的指令存放取决于编译器
 -   替换时间：在预编译时就已经替换，类似宏定义#define等
 
-![img](C:\Users\huany\Documents\note\pictures\3fc98e11-413f-4264-a4ec-a8598c8b076d-4786849-1620638863155.jpg)
+![img](..\..\pictures\3fc98e11-413f-4264-a4ec-a8598c8b076d-4786849-1620638863155.jpg)
 
 ## malloc与new之间的区别？
 
@@ -467,7 +467,7 @@ g++ index.o -o index.exe //链接，生成exe可执行文件
 
 -   参数：使用new操作符申请内存分配时无须指定内存块的大小，编译器会根据类型信息自行计算。而malloc则需要显式地指出所需内存的尺寸
 
--   返回类型：new操作符内存分配成功时，返回的是与对象类型严格匹配的指针，无须进行类型转换，而malloc内存分配成功则是返回void * ，需要通过强制类型转换将void*指针转换成我们需要的类型。![img](C:\Users\huany\Documents\note\pictures\d5ef10ec-fcf6-4473-9266-2ad91b016528-4786849.jpg)
+-   返回类型：new操作符内存分配成功时，返回的是与对象类型严格匹配的指针，无须进行类型转换，而malloc内存分配成功则是返回void * ，需要通过强制类型转换将void*指针转换成我们需要的类型。![img](..\..\pictures\d5ef10ec-fcf6-4473-9266-2ad91b016528-4786849.jpg)
 
 -   自定义类型：对于自定义类型，由于malloc与free是标准库函数，无法完成对象创建时的自动执行构造函数与对象消亡时自动执行析构函数，因此此时只能用new与delete，无法用malloc与free
 
