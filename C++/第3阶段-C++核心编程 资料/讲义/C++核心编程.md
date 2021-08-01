@@ -2619,7 +2619,6 @@ int main() {
 
 
 ```C++
-
 class MyInteger {
 
 	friend ostream& operator<<(ostream& out, MyInteger myint);
