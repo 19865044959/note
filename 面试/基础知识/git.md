@@ -131,3 +131,23 @@ git push gitee :refs/tags/v1.0 //删除远程仓库标签
 ## cmake与makefile懂吗？
 
 ## git本地有2个commit合成一个怎么操作？
+
+## 无法git pull怎么办？即当远程库更新，但是你的本地库也修改了相应的文件
+
+1.  如果你无视本地修改的相应文件
+
+    ```shell
+    git reset -- hard #退回到当前版本的HEAD，并且以hard形式，即将git repository、缓冲区、working directory全部擦除换上当前版本HEAD
+    
+    git pull #再次拉取
+    ```
+
+2.  如果你想看一看到底是留哪一个，那么可以直接：
+
+    ```shell
+    git stash #将working directory保存到stack中，并退回到当前版本的HEAD
+    git pull #顺利pull下来
+    git stash pop #打开冲突文件，会显示冲突信息，包括git pull下来什么，git stash下来什么，再次修改，保存
+    git pull gitee main #这次就不会有冲突啦，git默认你已经手动修改好了
+    ```
+

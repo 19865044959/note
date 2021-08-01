@@ -45,11 +45,8 @@
 
 -   系统信息
     -   arch 显示处理器架构（x86 还是x86_64）
-    
     -   uname -r 显示内核版本
-    
     -   cat /proc/interrupts 显示中断
-    
 -   关机
 
     -   init 0
@@ -57,46 +54,38 @@
     -   shutdown -h now
 
     -   telinit 0
-
 -   文件和磁盘空间：
-
+    -   df -h 列出linux中所有的磁盘，并以人可读的方式呈现磁盘大小
     -   fdisk - l列出所有分区表
-
 -   文件目录与管理：
 
     -   cd 切换目录
 
         -   cd /切换到根目录
 
-        -   cd  切换到个人主目录
-
-    -   pwd 查看当前绝对路径
-
+        -   cd  ~切换到个人主目录
+-   pwd 查看当前绝对路径
     -   mkdir 创建目录
 
         -   mkdir test //在当前目录创建一个test文件夹
 
         -   mkdir -p test2/test3 //在当前目录下的test2目录中，创建test3目录，如果没有-p，那么会报错
-
-    -   rmdir 删除目录
-
-        -   rmdir  test2/test3 //在当前目录下的test2目录中，删除test3目录，注意test3目录一定是空才能删除
-
-        -   rm -rf test2 //强行递归删除目录test2以及其下的所有内容，不可恢复
-
+-   rmdir 删除目录
+    
+    -   rmdir  test2/test3 //在当前目录下的test2目录中，删除test3目录，注意test3目录一定是空才能删除
+    
+    -   rm -rf test2 //强行递归删除目录test2以及其下的所有内容，不可恢复
     -   ls 查看当前目录下的文件
-
-    -   cp 拷贝文件
+    -   ll查看文件详细属性
+        -   ls -a 查看隐藏文件
+-   cp 拷贝文件
         -   cp source  dest //比如，cp ./main.cpp test2 -----将本目录下的main.cpp文件复制到当前目录下test2目录中
-
-    -   mv 移动文件(与cp相同)， 可以利用它来重命名文件，mv a.txt b.txt //将a.txt文件重命名为b.txt文件
-
+-   mv 移动文件(与cp相同)， 可以利用它来重命名文件，mv a.txt b.txt //将a.txt文件重命名为b.txt文件
 -   创建与删除文件
 
     -   touch xxx.md/xxx.cpp/xxx.c
 
     -   rm xxx.md/xxx.cpp/xxx.c
-
 -   查看文件内容：
 
     -   cat（用于连接文件并打印到标准输出设备上，即终端上）
@@ -123,7 +112,6 @@
         -   head -c 20 main.cpp 显示main.cpp的前20个字节
 
     -   tail（与head用法相似）
-
 -   文件目录与权限：
 
     -   chmod
@@ -136,25 +124,21 @@
 
             -   o: other 所有其他用户
 
-        -   chmod ugo +rwx main.cpp 所有人都可以对main.cpp rwx
+        -   chmod ugo+rwx main.cpp 所有人都可以对main.cpp rwx
 
     -   chown
 
     -   chgrp
 
     -   umask
-
 -   文件查找：
 
     -   which
-
-    -   whereis
-
-    -   locate
-
+-   whereis
+        -   比如一个binary被添加到了PATH中，那么可用：whereis DCPSInfoRepo来查看它的绝对路径
+-   locate
     -   find
-        -   find . -name "*.cpp" //查找当前目录及其子目录下所有后缀名为.cpp的文件
-
+    -   find 路径 -name "*.cpp" //查找路径及其子目录下所有后缀名为.cpp的文件
 -   进程管理：
 
     -   ps -u 显示所有用户进程
@@ -164,13 +148,11 @@
     -   ps -ax 列出所有进程的信息
 
     -   top 实时显示进程状况、CPU占用率、内存占用率、PID
-
 -   前台运行程序：
 
     -   ctrl + c 结束一个前台正在运行的程序
 
     -   ctrl + z 停止一个前台正在运行的程序
-
 -   删除：
 
     -   rm -rf 无提示递归删除本目录下的所有文件及其子文件
@@ -179,7 +161,7 @@
 
 -   首先创建一个.c文件，touch hello.c
 
--   编辑器：利用gedit编辑器打开 hello.c文件：gedit hello.c /  vim hello.c
+-   编辑器：利用gedit编辑器打开 hello.c文件：gedit hello.c /  vi hello.c
 
 -   编写完程序后，保存，利用gcc编译器来编译与链接.c文件，生成可执行文件gcc hello.c -o hello
 
