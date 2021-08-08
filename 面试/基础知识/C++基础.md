@@ -732,3 +732,9 @@ void ISR(){
 }
 ```
 
+## 试比较char* ptr = "abc" & char ptr[] = "abc" & char* ptr = (char*)malloc(sizeof(char))的区别
+
+-   char* ptr = "abc":一个char类型指针指向了字符串abc的首地址，abc存储在常量区，ptr[1] = 'k'会出现段错误
+-   char ptr[] = "abc"：ptr是一个字符串数组，abc储存在栈空间上，ptr[1] = 'k'不会出现错误
+-   char* ptr = (char*)malloc(sizeof(char))：一个char类型指针指向了在堆中开辟了的内存空间
+
