@@ -738,3 +738,66 @@ void ISR(){
 -   char ptr[] = "abc"：ptr是一个字符串数组，abc储存在栈空间上，ptr[1] = 'k'不会出现错误
 -   char* ptr = (char*)malloc(sizeof(char))：一个char类型指针指向了在堆中开辟了的内存空间
 
+## 什么是命名空间(namespace)?它有什么用？
+
+- 作用：主要解决命名冲突问题。
+
+- 真实场景：
+
+  - 一般大型项目都会引入第三方库，这些第三方库中很有可能有一些函数或者类是与你自己写的函数或者类重名的，那么这样在#include环节就会报错：重定义。
+  - 大型项目会分成多个部分被不同的程序员完成，那么也有可能出现同名的变量、函数、类。
+
+- 命名空间就是为了解决这个事情。通过将自己的模块用命名空间括起来，那么即使与其他模块有重名的函数或者类，那么可以通过双冒号来去区分，比如：
+
+  ```c++
+  //PeopleA.h
+  namespace PeopleA
+  class Student
+  {public:
+      Student(int n, char s, string name)
+      {
+          //.....
+      }
+  private:
+      int num;
+      string name;
+      char sex;
+  };
+  int fun(int a, int b)
+  {
+      return a + b;
+  }
+  
+  //PeopleB.h
+  namespace PeopleB
+  class Student
+  {
+  public:
+      Student(int n, char s, string name)
+      {
+          //.....
+      }
+  private:
+      int num;
+      char sex;
+      string name;
+  };
+  int fun(int a, int b)
+  {
+      return a + b;
+  }
+  
+  #include <iostream>
+  #include "People A.h"
+  #include "People B.h"
+  int main()
+  {
+      PeopleA::Student stdu1(101, 18, "wang");
+      cout << PeopleA::fun(5, 3) << endl;
+      PeopleB::Student stdu1(101, 18, "wang");
+      cout << PeopleB::fun(5, 3) << endl;
+      return 0;
+  }
+  ```
+
+  

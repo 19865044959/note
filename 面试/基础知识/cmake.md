@@ -36,10 +36,13 @@
 add_library(<name> <SHARED|STATIC|MODULE|UNKNOWN> IMPORTED
             [GLOBAL])
             
-add_library(mylib STATIC source/show.cpp) #创建一个静态库，
+add_library(mylib STATIC source/show.cpp) #创建一个静态库
 ```
 
 - 通过source file去创建一个library
+-   `STATIC` libraries are archives of object files for use when linking other targets.
+-  `SHARED` libraries are linked dynamically and loaded at runtime.  
+- `MODULE` libraries are plugins that are not linked into other targets but may be loaded dynamically at runtime using dlopen-like functionality.
 
 ## target_include_directories
 

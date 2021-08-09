@@ -44,9 +44,25 @@
 ## linux常用命令
 
 -   系统信息
-    -   arch 显示处理器架构（x86 还是x86_64）
-    -   uname -r 显示内核版本
-    -   cat /proc/interrupts 显示中断
+    - arch 显示处理器架构（x86 还是x86_64）
+    
+    - uname -r 显示内核版本
+    
+    - cat /proc/interrupts 显示中断
+    
+    - cat /proc/cpuinfo 查看cpu
+    
+    - cat /proc/PID/smaps 用于查看进程所占用内存情况，其中rss是实际占用的物理内存
+    
+    - cat /proc/uptime 显示系统运行时间
+    
+      ```shell
+      #第一个是系统启动到现在的时间，第二是系统空闲时间
+      huanyzhang@ZHY-Computer:~/test$ cat /proc/uptime 
+      101095.75 351821.24
+      ```
+    
+      
     
 -   关机
 
@@ -172,12 +188,11 @@
 -   进程管理：
 
     -   ps -u 显示所有用户进程
-
     -   ps -af 显示所有跟终端相关的进程详细信息
-
     -   ps -ax 列出所有进程的信息
-
     -   top 实时显示进程状况、CPU占用率、内存占用率、PID
+    -   pidstat主要用于监控全部或指定进程占用系统资源的情况，如CPU，内存、设备IO、任务切换、线程等
+        -   https://bbs.huaweicloud.com/forum/thread-72864-1-1.html
     
 -   前台运行程序：
 
@@ -188,6 +203,8 @@
 -   删除：
 
     -   rm -rf 无提示递归删除本目录下的所有文件及其子文件
+    
+-   
 
 ## linux编辑、编译与链接
 
