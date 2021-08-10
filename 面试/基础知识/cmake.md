@@ -36,10 +36,10 @@
 add_library(<name> <SHARED|STATIC|MODULE|UNKNOWN> IMPORTED
             [GLOBAL])
             
-add_library(mylib STATIC source/show.cpp) #创建一个静态库
+add_library(mylib STATIC source/show.cpp) #创建一个静态库，这里静态库为libmylib.so文件
 ```
 
-- 通过source file去创建一个library
+- 通过source file去创建一个library，库的类型默认为STATIC
 -   `STATIC` libraries are archives of object files for use when linking other targets.
 -  `SHARED` libraries are linked dynamically and loaded at runtime.  
 - `MODULE` libraries are plugins that are not linked into other targets but may be loaded dynamically at runtime using dlopen-like functionality.
@@ -62,8 +62,6 @@ target_include_directories(<target> [SYSTEM] [BEFORE]
   #目录结构是：include文件中包含了show.h头文件
   ```
 
-  
-
 - 经过尝试，发现这条指令必须在add_executable后面，因为add_executable后才生成target吗？
 
 ## target_link_libraries
@@ -82,6 +80,10 @@ add_subdirectory (source_dir [binary_dir] [EXCLUDE_FROM_ALL])
 ```
 
 - 添加一个子目录并构建该子目录
+- 必选参数：source_dir：该参数指定一个子目录，子目录下应该包含`CMakeLists.txt`文件和代码文件。子目录可以是相对路径也可以是绝对路径，如果是相对路径，则是相对当前目录的一个相对路径。
+- 可选参数 [binary_dir] ：该参数指定一个目录，用于存放输出文件。可以是相对路径也可以是绝对路径，如果是相对路径，则是相对当前输出目录的一个相对路径。如果该参数没有指定，则默认的输出目录使用`source_dir`。
+- 可选参数[EXCLUDE_FROM_ALL]。当指定了该参数，则子目录下的目标target不会被父目录下的目标文件包含进去，父目录的`CMakeLists.txt`不会构建子目录的目标文件，必须在子目录下显式去构建。`例外情况：当父目录的目标依赖于子目录的目标，则子目录的目标仍然会被构建出来以满足依赖关系（例如使用了target_link_libraries）`。
+- 资料：https://www.jianshu.com/p/07acea4e86a3
 
 ## 常用内置变量
 
@@ -143,5 +145,8 @@ SET(CMAKE_BUILD_TYPE "Debug")
 
 - out of source将生成的.o、binary、CMakeCache.txt与source文件分离，有利于rm -rf *清除build中的所有产生物，对source没有任何影响
 
+### 请你说明以下cmake生成的几个文件到底有什么作用
 
+- CMakeCache.txt:可以修改一些CMake使用的变量
+- CMakeFiles:里面有CMakeLOG，可以去查看
 

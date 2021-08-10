@@ -1,3 +1,7 @@
+## git资料
+
+git官网的doc：https://git-scm.com/
+
 ## 本地git工作区域
 
 <img src="../../pictures/clip_image002-1621865862273.jpg" alt="img" style="zoom:80%;" />
@@ -128,11 +132,116 @@ git push gitee :refs/tags/v1.0 //删除远程仓库标签
 5. 命令模式下，quit不保存退出 write保存不退出 wq保存退出
 ```
 
+## .gitignore
+
+- 作用：忽略日志文件、临时文件、编译的中间文件等，不将这些文件提交到git上
+
+  ```shell
+  #忽略CMake生成的日至文件、临时文件
+  CMakeCache.txt
+  CMakeFiles
+  Makefile
+  cmake_install.cmake
+  install_manifest.txt
+  
+  #
+  # Sublime Test
+  #
+  # cache files for sublime text
+  *.tmlanguage.cache
+  *.tmPreferences.cache
+  *.stTheme.cache
+  
+  # workspace files are user-specific
+  *.sublime-workspace
+  
+  # project files should be checked into the repository, unless a significant
+  # proportion of contributors will probably not be using SublimeText
+  # *.sublime-project
+  
+  #
+  # C / C++
+  #
+  
+  # Compiled Object files
+  *.slo
+  *.lo
+  *.o
+  *.obj
+  *.ko
+  *.elf
+  
+  # Precompiled Headers
+  *.gch
+  *.pch
+  
+  # Compiled Dynamic libraries
+  *.so
+  *.dylib
+  *.dll
+  *.so.*
+  *.dylib
+  
+  # Fortran module files
+  *.mod
+  
+  # Compiled Static libraries
+  *.lai
+  *.la
+  *.a
+  *.lib
+  *.lo
+  
+  # Executables
+  *.exe
+  *.out
+  *.app
+  
+  /**/build
+  /**/build.*
+  
+  .tags
+  .vscode
+  ```
+
+  
+
 ## 常见问题
 
+### git中如果我不故意手抖将working directory中一个重要的文件rm -rf了怎么办？
 
+- 如果仅仅是删除了，没有git add，那么直接git checkout file_name即可，如下图所示：![image-20210810170134159](../../pictures/image-20210810170134159.png)
+
+  - 首先我rm -rf aaa.txt，利用git status查看，发现aaa.txt已经被删除，但是没有被加入到index中，颜色是红色
+  - 接下来我用git checkout aaa.txt，将文件aaa.txt还原成上次提交后的样子，再次git status，发现没有提交，并且aaa.txt已经回来了
+- 如果是git add aaa.txt之后，那么需要首先将git reset HEAD，此时暂存区已经恢复成未保存状态，再次git checkout aaa.txt，即可将文件恢复
+
+> 注意：如果恢复修改过文件也是一样，那么git checkout会利用最新提交的文件全部替换已经修改过的文件，这意味着你修改过的文件不再存在。警惕！
+
+- 如果已经提交到repository，即git commit -m"xxx"，那么如果你真的确定你想完全回退到你上一次commit的结果，用git reset --hard HEAD~即可;或者你可以用git reset HEAD~ + git checkout aaa.txt组合也是可以达成的
+
+### 请问git reset --soft/[mixed]/hard HEAD～到底有什么区别？
+
+- git reset --soft HEAD～ 仅仅移动HEAD分支指向，指向为它的父节点![image-20210810175451065](../../pictures/image-20210810175451065.png)
+- git reset [--mixed] HEAD~ 移动HEAD分支指向，并同时改变index![image-20210810175515916](../../pictures/image-20210810175515916.png)
+- git reset --hard HEAD～ 慎！将整个工作目录重置为上一次提交时的状态图如下所示：![image-20210810175527181](../../pictures/image-20210810175527181.png)
 
 ### git本地有2个commit合成一个怎么操作？
+
+- git log #查看需要合并的前n个commit的commit number
+
+- git rebase -i commit_number #进入合并选择窗口![image-20210810194017162](../../pictures/image-20210810194017162.png)
+
+- 按照指示，利用s与前一个版本进行融合![image-20210810194154096](../../pictures/image-20210810194154096.png)
+
+- 保存退出，之后键入以下命令，第二次进入合并窗口
+
+  ```shell
+  git add .
+  git rebase --continue
+  ```
+
+- 再次确认合并，然后就可以打开git log，发现多个commit已经被合并了![image-20210810194648712](../../pictures/image-20210810194648712.png)
 
 ### 无法git pull怎么办？即当远程库更新，但是你的本地库也修改了相应的文件
 
@@ -153,3 +262,6 @@ git push gitee :refs/tags/v1.0 //删除远程仓库标签
     git pull gitee main #这次就不会有冲突啦，git默认你已经手动修改好了
     ```
 
+### 其他
+
+- https://segmentfault.com/a/1190000019315509
