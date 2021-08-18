@@ -500,7 +500,7 @@ int main() {
 
 ### 2.5 引用的本质
 
-本质：**引用的本质在c++内部实现是一个指针常量.**
+本质：**引用的本质在c++内部实现是一个指针常量.**即不允许改变指针指向的对象。
 
 讲解示例：
 
@@ -679,7 +679,7 @@ int main() {
 
 
 
-**作用：**函数名可以相同，提高复用性
+**作用：**函数名可以相同，提高**复用性**
 
 
 
@@ -691,9 +691,22 @@ int main() {
 
 
 
-**注意:**  函数的返回值不可以作为函数重载的条件
+**注意:**  函数的返回值**不可以**作为函数重载的条件
 
+```c++
+//因为有可能发生隐式类型转换
+int fcn(int a){
+	return a;
+}
 
+float fcn(int a){
+	return (float)a;
+}
+
+int main(){
+	float res = fcn(3); //由于int类型可以隐式类型转换变成float，因此编译器出现二义性，无法辨认是调用int还是float
+}
+```
 
 **示例：**
 
@@ -1186,7 +1199,151 @@ int main() {
 
 
 
+```c++
+#include <iostream>
 
+#include <stdio.h>
+
+#include <string>
+
+#include <ctime>
+
+using namespace std;
+
+class Point
+
+{
+
+public:
+
+          void setx(int x) {
+
+          m_x = x;
+
+}
+
+int getx() {
+
+         return m_x;
+
+}
+
+void sety(int y) {
+
+       m_y = y;
+
+}
+
+int gety() {
+
+      return m_y;
+
+}
+
+private:
+
+           int m_x;
+
+           int m_y;
+ 
+};
+
+class Circle
+
+{
+
+public:
+
+         //设置圆心
+
+         void setCenter(Point center) {
+
+         m_Center = center;
+
+}
+
+//设置半径
+
+        void setR(int r) {
+
+        m_R = r;
+
+}
+
+int getR() {
+
+       return m_R;
+
+}
+
+Point getcenter() {
+
+      return m_Center;
+
+}
+
+private:
+
+      int m_R;
+
+      Point m_Center;
+
+};
+
+void isInCircle(Circle &c, Point &p)
+
+{
+
+        int distance =
+
+        (c.getcenter().getx() - p.getx())*(c.getcenter().getx() - p.getx()) +
+
+        (c.getcenter().gety() - p.gety())*(c.getcenter().gety() - p.gety());
+
+        int rDistance = c.getR()*c.getR();
+
+       if (distance == rDistance)
+      {
+      cout << "点在圆上" << endl;
+      }
+      else if (distance > rDistance)
+     {
+      cout << "点在圆外" << endl;
+     }
+     else
+     {
+     cout << "点在圆内" << endl;
+     }
+}
+
+int main() {
+
+        Circle c;
+
+        c.setR(10);
+
+        Point center;
+
+        center.setx(10);
+
+        center.sety(0);
+
+        c.setCenter(center);
+
+        Point p;
+  
+        p.setx(10);
+
+        p.sety(10);
+
+        isInCircle(c, p);
+
+        system("pause");
+
+        return 0;
+
+}
+```
 
 
 
@@ -1230,7 +1387,7 @@ c++利用了**构造函数**和**析构函数**解决上述问题，这两个函
 
 1. 构造函数，没有返回值也不写void
 2. 函数名称与类名相同
-3. 构造函数可以有参数，因此可以发生重载
+3. 构造函数可以有参数，因此可以发生**重载**
 4. 程序在调用对象时候会自动调用构造，无须手动调用,而且只会调用一次
 
 
@@ -1241,7 +1398,7 @@ c++利用了**构造函数**和**析构函数**解决上述问题，这两个函
 
 1. 析构函数，没有返回值也不写void
 2. 函数名称与类名相同,在名称前加上符号  ~
-3. 析构函数不可以有参数，因此不可以发生重载
+3. 析构函数不可以有参数，因此**不可以发生重载**
 4. 程序在对象销毁前会自动调用析构，无须手动调用,而且只会调用一次
 
 
@@ -1818,7 +1975,7 @@ int main() {
 
 *  静态成员变量
    *  所有对象共享同一份数据
-   *  在编译阶段分配内存
+   *  在**编译阶段**分配内存
    *  类内声明，类外初始化
 *  静态成员函数
    *  所有对象共享同一个函数
@@ -1959,7 +2116,7 @@ int main() {
 
 在C++中，类内的成员变量和成员函数分开存储
 
-只有非静态成员变量才属于类的对象上
+**只有非静态成员变量才属于类的对象上**
 
 
 
@@ -2096,6 +2253,7 @@ public:
 	}
 
 	void ShowPerson() {
+        //如果不加这行代码，会报错，因为mAge不存在
 		if (this == NULL) {
 			return;
 		}
@@ -2110,7 +2268,7 @@ void test01()
 {
 	Person * p = NULL;
 	p->ShowClassName(); //空指针，可以调用成员函数
-	p->ShowPerson();  //但是如果成员函数中用到了this指针，就不可以了
+	p->ShowPerson();  //
 }
 
 int main() {
@@ -2713,7 +2871,7 @@ c++编译器至少给一个类添加4个函数
 
 
 
-为什么需要手写赋值运算符？答：如果类中有属性指向堆区，做赋值操作时也会出现深浅拷贝问题
+为什么需要手写赋值运算符？答：如果类中有属性指向堆区，做赋值操作时也会出现深浅拷贝问题，如果不重写拷贝赋值运算符，那么会使得堆区的内容重复释放，程序崩溃
 
 
 
