@@ -145,17 +145,24 @@
         -   chmod 谁 +- rwx 文件名，其中，谁包括：
 
             -   u:user 文件所有者
-
             -   g:group 文件所有者所在组
-
             -   o: other 所有其他用户
-
+            -   a:所有用户
+            
         -   chmod ugo+rwx main.cpp 所有人都可以对main.cpp rwx
-
-    -   chown
-
-    -   chgrp
-
+        
+    - chown
+    
+      ```shell
+      chown root:root main.cpp #将main.cpp的拥有者改成root，分组改成root组
+      ```
+    
+    - chgrp
+    
+      ```shell
+      chown huanyzhang main.cpp #将main.cpp分组改为huanyzhang
+      ```
+    
     -   umask
     
 - 文件查找：
