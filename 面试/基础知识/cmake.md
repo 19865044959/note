@@ -36,7 +36,7 @@
 add_library(<name> <SHARED|STATIC|MODULE|UNKNOWN> IMPORTED
             [GLOBAL])
             
-add_library(mylib STATIC source/show.cpp) #创建一个静态库，这里静态库为libmylib.so文件
+add_library(mylib STATIC source/show.cpp) #创建一个静态库，这里静态库为libmylib.a文件
 ```
 
 - 通过source file去创建一个library，库的类型默认为STATIC

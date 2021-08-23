@@ -23,13 +23,22 @@ git官网的doc：https://git-scm.com/
 ```c++
 找到本地文件夹，git bash here
 git init //初始化仓库
-git add .(文件name) //添加工作区文件到暂存区中
-git commit -m “first commit” //添加文件描述信息，把暂存区中的文件push到本地仓库中
 git remote add github/gitee + 远程仓库地址 //链接远程仓库，创建主分支，最好用SSH，不用输入密码
 git pull github/gitee main //相当于两次操作，git fetch + git merge gitee/main，原因是：远程仓库有可能发生了改变，比如说：其他人push一个new commit进远程仓库，这时候需要利用git fetch来同步远程仓库，并将远程仓库分支main合并到本地的当前分支之中（说白了就是把远程仓库）改变的东西同步到本地仓库，远程仓库创建了一个文件你本地仓库也会同步过来相同的文件，这是多人操作的基础
 //这句话的意思：把远程仓库名为github/gitee的分支main来取出来，与本地当前分支（首先要调整到main）合并
 git push -u github/gitee main //将分支main推送到远程仓库github/gitee中，如果想推送当前分支，那么直接省略main即可
 ```
+
+## 查看working directory/stage/repository不同
+
+```shell
+git diff #查看working directory与暂存区stage的不同
+git diff HEAD #查看wd与HEAD的commit有什么不同
+git diff -cached HEAD #查看stage与HEAD的commit有什么不同
+git diff commit1 commit2 #查看两次提交的不同
+```
+
+
 
 ## 撤销修改
 
@@ -56,7 +65,7 @@ git checkout a.txt
 
 ```c++
 git log //查看commit的信息，最近commit会在最上面
-git reset commit-num //在git log上可以看到每个commit的校验和，将该校验和复制，并替换commit-num，这句话将该版本提交到暂存区中
+git reset commit //在git log上可以看到每个commit的校验和，将该校验和复制，并替换commit-num，这句话将该版本提交到暂存区中
 git checkout a.txt //拉取暂存区的a.txt文件到工作区，并覆盖工作区
 ```
 
@@ -74,7 +83,7 @@ git config --global user.email 'xxx'
 
 ```c++
 git branch dev //创建dev分支
-git checkout dev //切换到dev分支
+git checkout dev //切换到dev分支，此时HEAD指针指向切换到的dev分支
 git branch //查看当前分支情况
 ```
 
@@ -83,6 +92,58 @@ git branch //查看当前分支情况
 ```c++
 git merge dev //将dev分支合并到main之中（首先需要切换到main）
 ```
+
+### 合并冲突操作
+
+-   假设我现在有两个分支，一个分支是main，一个是dev，main与dev中均有merge.cpp文件，未合并前，如下：
+
+![image-20210823114436509](../../pictures/image-20210823114436509.png)
+
+​	内容如下：
+
+```c++
+//main中的merge.cpp
+
+#include <iostream>
+using namespace std;
+int main(){
+	cout << "这是在main分支所输出的内容！" << endl;
+}
+
+
+//dev中的merge.cpp
+
+#include <iostream>
+using namespace std;
+int main(){
+	cout << "这是在dev分支所输出的内容！" << endl;
+}
+```
+
+-   现在我checkout到main分支上，准备merge dev，显示我有conflict
+
+![image-20210823114813927](../../pictures/image-20210823114813927.png)
+
+-   git status一下，看一看哪个没有被merge
+
+![image-20210823114850558](../../pictures/image-20210823114850558.png)
+
+-   vi merge.cpp查看冲突文件
+
+![image-20210823114950409](../../pictures/image-20210823114950409.png)
+
+-   删除分歧后：
+
+![image-20210823115127908](../../pictures/image-20210823115127908.png)
+
+-   git add merge.cpp 
+-   git commit ，会弹出一个界面，需要再次确定是否merge，以及merge的commit message，输入message之后，wq一下就行了
+
+![image-20210823120051436](../../pictures/image-20210823120051436.png)
+
+-   再次调用gitk --all，会发现两个分支已经被merge了
+
+![image-20210823120138692](../../pictures/image-20210823120138692.png)
 
 ### 删除分支
 
@@ -105,6 +166,17 @@ git remote -v //查询当前已关联的远程仓库的信息
 ```
 
 -   那么以后利用指令`git push gitee/github main`就可以选择push main分支到哪个远程仓库了
+
+### 如何可视化查看分支情况？
+
+-   利用gitk工具
+
+    ```shell
+    gitk --all#可视化所有commit以及分支
+    gitk --simplify-by-decoration --all
+    ```
+
+
 
 ## 标签操作
 
@@ -214,11 +286,13 @@ git push gitee :refs/tags/v1.0 //删除远程仓库标签
 
   - 首先我rm -rf aaa.txt，利用git status查看，发现aaa.txt已经被删除，但是没有被加入到index中，颜色是红色
   - 接下来我用git checkout aaa.txt，将文件aaa.txt还原成上次提交后的样子，再次git status，发现没有提交，并且aaa.txt已经回来了
-- 如果是git add aaa.txt之后，那么需要首先将git reset HEAD，此时暂存区已经恢复成未保存状态，再次git checkout aaa.txt，即可将文件恢复
+- 如果是git add aaa.txt之后，那么需要首先将git reset aaa.txt，此时暂存区的aaa.txt已经恢复成了没有被add时的状态，再次git checkout aaa.txt，即可恢复到文件在working directory被修改过后，没有被提交到stage的状态，即“Changes not staged for commit”的红色状态
 
 > 注意：如果恢复修改过文件也是一样，那么git checkout会利用最新提交的文件全部替换已经修改过的文件，这意味着你修改过的文件不再存在。警惕！
 
 - 如果已经提交到repository，即git commit -m"xxx"，那么如果你真的确定你想完全回退到你上一次commit的结果，用git reset --hard HEAD~即可;或者你可以用git reset HEAD~ + git checkout aaa.txt组合也是可以达成的
+
+![关于版本控制：git reset –mixed，-soft和–hard有什么区别？ | 码农家园](../../pictures/qRAte.jpg)
 
 ### 请问git reset --soft/[mixed]/hard HEAD～到底有什么区别？
 
@@ -229,10 +303,13 @@ git push gitee :refs/tags/v1.0 //删除远程仓库标签
 ### git本地有2个commit合成一个怎么操作？
 
 - git log #查看需要合并的前n个commit的commit number
+- git rebase -i commit_number1 commit_number2 ...  #进入合并选择窗口
 
-- git rebase -i commit_number #进入合并选择窗口![image-20210810194017162](../../pictures/image-20210810194017162.png)
+![image-20210810194017162](../../pictures/image-20210810194017162.png)
 
-- 按照指示，利用s与前一个版本进行融合![image-20210810194154096](../../pictures/image-20210810194154096.png)
+- 按照指示，利用s与前一个版本进行融合
+
+![image-20210810194154096](../../pictures/image-20210810194154096.png)
 
 - 保存退出，之后键入以下命令，第二次进入合并窗口
 
@@ -261,6 +338,17 @@ git push gitee :refs/tags/v1.0 //删除远程仓库标签
     git stash pop #打开冲突文件，会显示冲突信息，包括git pull下来什么，git stash下来什么，再次修改，保存
     git pull gitee main #这次就不会有冲突啦，git默认你已经手动修改好了
     ```
+
+### git commit message你是怎样填写的？
+
+```shell
+<type>(<scope>): <subject>
+#type描述了你本次commit是什么类型，比如新增了功能(feat)、fix bug、文档说明docs、test、merge等
+#scope可选项，说明你本次commit的范围是什么
+#subject必选项，对于你这次commit的小于50字的一些描述
+```
+
+
 
 ### 其他
 

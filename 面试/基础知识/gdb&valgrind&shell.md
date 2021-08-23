@@ -7,10 +7,12 @@
 g++ -g main.cpp -o main.out
 cmake -DCMAKE_BUILD_TYPE=Debug
 
+gdb main.out
+
 l 1 #list 1，查看行数为1的源码
 
 b 35 #break point
-b 35 if i = 5 #设置条件断点。如果我的break point是放在了一个循环中，我想查看当i = 5时变量值是如何，那么我就用这个“条件断点”来实现当i = 5时，才stop
+b 35 if i == 5 #设置条件断点。如果我的break point是放在了一个循环中，我想查看当i = 5时变量值是如何，那么我就用这个“条件断点”来实现当i == 5时，才stop
 
 r #run
 n #next，就是下一行语句，不会进入函数中
