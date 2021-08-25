@@ -70,6 +70,144 @@
 
 ## linux常用命令
 
+### 文件操作
+
+#### 目录文件操作（拷贝、删除、比较）
+
+-   文件目录与管理：
+
+    -   cd 切换目录
+
+        -   cd /切换到根目录
+
+        -   cd  ~切换到个人主目录
+-   pwd 查看当前绝对路径
+    -   mkdir 创建目录
+
+        -   mkdir test //在当前目录创建一个test文件夹
+
+        -   mkdir -p test2/test3 //在当前目录下的test2目录中，创建test3目录，如果没有-p，那么会报错
+-   mkdir创建目录
+-   rmdir 删除目录
+    -   rmdir  test2/test3 //在当前目录下的test2目录中，删除test3目录，注意test3目录一定是空才能删除
+
+    -   rm -rf test2 //强行递归删除目录test2以及其下的所有内容，不可恢复
+    -   ls 查看当前目录下的文件
+    -   ll查看文件详细属性
+        -   ls -a 查看隐藏文件
+-   dircpy 比较两个目录的内容
+    -   dircmp dir1 dir2
+
+#### 普通文件操作（拷贝、删除、查看、==权限管理==、==查找==）
+
+-   cp 拷贝文件
+        -   cp source  dest //比如，cp ./main.cpp test2 -----将本目录下的main.cpp文件复制到当前目录下test2目录中
+
+- mv 移动文件(与cp相同)， 可以利用它来重命名文件，mv a.txt b.txt //将a.txt文件重命名为b.txt文件
+
+-   创建与删除文件
+
+    -   touch xxx.md/xxx.cpp/xxx.c
+
+    -   rm xxx.md/xxx.cpp/xxx.c
+
+-   查看文件内容：
+
+    -   cat（用于连接文件并打印到标准输出设备上，即终端上）
+
+        -   cat -n main.cpp //将main.cpp文件编号打印
+
+        -   cat -n main.cpp > main2.cpp //将main.cpp文件的内容加上行号后输入到main2.cpp文件中，注：>是输出重定向
+
+        -   cat -n main.cpp main2.cpp > main3.cpp //将main.cpp与main2.cpp文件加上行号，一起输入到main3.cpp文件中
+
+        -   cat /dev/null > main3.cpp //清空main3.cpp文件
+
+    -   tac
+        -   tac main.cpp 将main.cpp文件反向输出
+
+    -   more 与cat相似，但是更方便逐页阅读
+
+    -   less 与more相似，但是需要按q来退出
+
+    -   head
+
+        -   head -n a main.cpp **显示**main.cpp的前a行，可以利用管道
+
+        -   head -c 20 main.cpp 显示main.cpp的前20个字节
+
+    -   tail（与head用法相似）
+
+-   文件目录与权限：
+
+    -   chmod
+
+        -   chmod 谁 +- rwx 文件名，其中，谁包括：
+
+            -   u:user 文件所有者
+            -   g:group 文件所有者所在组
+            -   o: other 所有其他用户
+            -   a:所有用户
+
+        -   chmod ugo+rwx main.cpp 所有人都可以对main.cpp rwx
+
+    - chown
+
+        ```shell
+        chown root:root main.cpp #将main.cpp的拥有者改成root，分组改成root组
+        ```
+
+    - chgrp
+
+        ```shell
+        chown huanyzhang main.cpp #将main.cpp分组改为huanyzhang
+        ```
+
+    -   umask
+
+- 文件查找：
+
+    -   which
+
+    -   whereis
+            -   比如一个binary被添加到了PATH中，那么可用：whereis DCPSInfoRepo来查看它的绝对路径
+
+        -   locate
+
+    -   ==find==
+
+        -   find 路径 -name "*.cpp" //查找路径及其子目录下所有后缀名为.cpp的文件
+        -   find 路径 -type f/l/s/... 
+        -   find 路径 -atime/mtime/ctime
+        -   find 路径 -size 50K  -size 80M
+        -   find 路径 -regex .*md #正则表达式，以md为结尾
+
+-   文件属性
+
+    -   stat + 文件名，可以看到它的atime mtime ctime等
+
+### 文本操作
+
+-   sort
+    -   sort afile
+    -   sort -r afile #逆序
+-   uniq
+    -   uniq -c afile
+-   grep
+    -   内容查找：
+
+```shell
+grep -r data ./a/b #在./a/b文件夹中，查找含有data关键字的文件
+grep data ./*test #在当前所有以test结尾的文件中，查找含有data关键字的文件
+```
+
+-   cut
+-   **vim**
+-   **sed**
+-   **awk**
+
+### 系统操作（系统信息、进程管理、网络管理）
+
 -   系统信息
     - arch 显示处理器架构（x86 还是x86_64）
     
@@ -89,8 +227,6 @@
       101095.75 351821.24
       ```
     
-      
-    
 -   关机
 
     -   init 0
@@ -103,113 +239,6 @@
     -   df -h 列出linux中所有的磁盘，并以人可读的方式呈现磁盘大小
     -   fdisk - l列出所有分区表
     
--   文件目录与管理：
-
-    -   cd 切换目录
-
-        -   cd /切换到根目录
-
-        -   cd  ~切换到个人主目录
-    
--   pwd 查看当前绝对路径
-    -   mkdir 创建目录
-
-        -   mkdir test //在当前目录创建一个test文件夹
-
-        -   mkdir -p test2/test3 //在当前目录下的test2目录中，创建test3目录，如果没有-p，那么会报错
-    
--   rmdir 删除目录
-    
-    -   rmdir  test2/test3 //在当前目录下的test2目录中，删除test3目录，注意test3目录一定是空才能删除
-    
-    -   rm -rf test2 //强行递归删除目录test2以及其下的所有内容，不可恢复
-    -   ls 查看当前目录下的文件
-    -   ll查看文件详细属性
-        -   ls -a 查看隐藏文件
-    
--   cp 拷贝文件
-        -   cp source  dest //比如，cp ./main.cpp test2 -----将本目录下的main.cpp文件复制到当前目录下test2目录中
-    
-- mv 移动文件(与cp相同)， 可以利用它来重命名文件，mv a.txt b.txt //将a.txt文件重命名为b.txt文件
-
--   创建与删除文件
-
-    -   touch xxx.md/xxx.cpp/xxx.c
-
-    -   rm xxx.md/xxx.cpp/xxx.c
-    
--   查看文件内容：
-
-    -   cat（用于连接文件并打印到标准输出设备上，即终端上）
-
-        -   cat -n main.cpp //将main.cpp文件编号打印
-
-        -   cat -n main.cpp > main2.cpp //将main.cpp文件的内容加上行号后输入到main2.cpp文件中
-
-        -   cat -n main.cpp main2.cpp > main3.cpp //将main.cpp与main2.cpp文件加上行号，一起输入到main3.cpp文件中
-
-        -   cat /dev/null > main3.cpp //清空main3.cpp文件
-
-    -   tac
-        -   tac main.cpp 将main.cpp文件反向输出
-
-    -   more 与cat相似，但是更方便逐页阅读
-
-    -   less 与more相似，但是需要按q来退出
-
-    -   head
-
-        -   head -n a main.cpp 显示main.cpp的前a行
-
-        -   head -c 20 main.cpp 显示main.cpp的前20个字节
-
-    -   tail（与head用法相似）
-    
--   文件目录与权限：
-
-    -   chmod
-
-        -   chmod 谁 +- rwx 文件名，其中，谁包括：
-
-            -   u:user 文件所有者
-            -   g:group 文件所有者所在组
-            -   o: other 所有其他用户
-            -   a:所有用户
-            
-        -   chmod ugo+rwx main.cpp 所有人都可以对main.cpp rwx
-        
-    - chown
-    
-      ```shell
-      chown root:root main.cpp #将main.cpp的拥有者改成root，分组改成root组
-      ```
-    
-    - chgrp
-    
-      ```shell
-      chown huanyzhang main.cpp #将main.cpp分组改为huanyzhang
-      ```
-    
-    -   umask
-    
-- 文件查找：
-
-  -   which
-  -   whereis
-          -   比如一个binary被添加到了PATH中，那么可用：whereis DCPSInfoRepo来查看它的绝对路径
-     -   locate
-  -   find
-      -   find 路径 -name "*.cpp" //查找路径及其子目录下所有后缀名为.cpp的文件
-
-- 内容查找：
-
-  -   grep
-
-  ```shell
-  grep -r data ./a/b #在./a/b文件夹中，查找含有data关键字的文件
-  grep data ./*test #在当前所有以test结尾的文件中，查找含有data关键字的文件
-  ```
-
 -   终端指令查找
 
     -   history
@@ -237,8 +266,6 @@
 -   删除：
 
     -   rm -rf 无提示递归删除本目录下的所有文件及其子文件
-    
--   
 
 ## linux编辑、编译与链接
 
