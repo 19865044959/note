@@ -9,7 +9,6 @@ git官网的doc：https://git-scm.com/
 ## 利用git clone将本地仓库与远程仓库连接
 
 ```c++
--   首先在github上new一个repository
 -   在本地某个地方打开git bash(命令行模式)
 -   输入：git clone 地址，其中地址是repository的url
 -   修改/增添文件
