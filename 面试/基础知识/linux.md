@@ -175,12 +175,12 @@
         -   locate
 
     -   ==find==
-
-        -   find 路径 -name "*.cpp" //查找路径及其子目录下所有后缀名为.cpp的文件
+    -   find 路径 -name "*.cpp" //查找路径及其子目录下所有后缀名为.cpp的文件
         -   find 路径 -type f/l/s/... 
         -   find 路径 -atime/mtime/ctime
         -   find 路径 -size 50K  -size 80M
         -   find 路径 -regex .*md #正则表达式，以md为结尾
+        -   find 路径 maxDepth 1 
 
 -   文件属性
 
@@ -236,8 +236,17 @@ grep data ./*test #在当前所有以test结尾的文件中，查找含有data�
     -   telinit 0
     
 -   文件和磁盘空间：
-    -   df -h 列出linux中所有的磁盘，并以人可读的方式呈现磁盘大小
-    -   fdisk - l列出所有分区表
+    - df -h 列出linux中所有的磁盘，并以人可读的方式呈现磁盘大小
+    
+    - fdisk - l列出所有分区表
+    
+    - du -h 查看各个文件所占用的空间大小，最后在左下角有文件大小汇总
+    
+      ```shell
+      du -h --max-depth=n #显示不同的层数，比如1，就意味着在本目录下，只显示子目录，不会显示子目录的子目录了
+      ```
+    
+      ![image-20210825205728775](../../../../../media/huanyzhang/张寰宇的移动硬盘/linux学习笔记/Linux实战技能100讲/imgs/image-20210825205728775.png)
     
 -   终端指令查找
 
